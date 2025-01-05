@@ -36,6 +36,10 @@ def main():
     while True:
         print("\nMenu:")
         print("1. Add Task")
+        print("2. Update Task")
+        print("3. Delete Task")
+        print("4. List Tasks")
+        print("5. List Tasks by Status")
         print("2. Quit")
         choice = input("Enter your choice: ")
 
@@ -44,7 +48,49 @@ def main():
             data.append(new_data)
             save_data(data)
             print("Task added successfully.")
-        elif choice == "2" or choice.lower() == "q":
+        elif choice == "2":
+            task_id = int(input("Please enter task id: "))
+            for task in data:
+                if task["id"] == task_id:
+                    new_description = input("Please enter new description: ")
+                    new_status = input("Please enter new status: ")
+
+                    task["description"] = new_description if new_description != "" else task["description"]
+                    task["status"] = new_status if new_status != "" else task["status"]
+                    task["updatedAt"] = get_current_timestamp()
+                    task_found = True
+                    print("Task updated successfully.")
+                    break
+
+            if task_found:
+                save_data(data)
+            else:
+                print("Task not found.")
+        elif choice == "3":
+            task_id = int(input("Please enter task id to delete: "))
+            task_found = False
+
+            for task in data:
+                if task["id"] == task_id:
+                    data.remove(task)
+                    task_found = True
+                    print("Task deleted successfully.")
+                    break
+            if task_found:
+                save_data(data)
+            else:
+                print("Task not found.")
+
+        elif choice == "4":
+            for task in data:
+                print(task)
+
+        elif choice == "5":
+            task_status = input("Please enter task status to show: ")
+            for task in data:
+                if task["status"] == task_status:
+                    print(task)
+        elif choice.lower() == "q":
             print("Exiting...")
             break
         else:
